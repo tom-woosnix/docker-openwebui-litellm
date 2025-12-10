@@ -1,58 +1,24 @@
 model_list:
-  - model_name: Claude 3.5 Sonnet
+  - model_name: gpt-5
     litellm_params:
-      model: claude-3-5-sonnet-20241022
-      api_key: os.environ/ANTHROPIC_API_KEY
-
-  - model_name: gpt-4o
-    litellm_params:
-      model: gpt-4o
+      model: gpt-5
       api_key: os.environ/OPENAI_API_KEY
-
-  - model_name: gpt-4o-mini
+  - model_name: gemini-3-pro
     litellm_params:
-      model: gpt-4o-mini
-      api_key: os.environ/OPENAI_API_KEY
-
-  - model_name: (OpenRouter) Llama 3.1 405B Instruct
+      model: gemini/gemini-3-pro-preview
+      api_key: os.environ/GEMINI_API_KEY # References the environment variable
+  - model_name: gemini-2.5-flash-proxy
     litellm_params:
-      model: openrouter/meta-llama/llama-3.1-405b-instruct
-      api_key: os.environ/OPENROUTER_API_KEY
-      drop_params: true
-
-  - model_name: (OpenRouter) Llama 3.1 Sonar Large Online
-    litellm_params:
-      model: openrouter/perplexity/llama-3.1-sonar-large-128k-online
-      api_key: os.environ/OPENROUTER_API_KEY
-      drop_params: true
-
-  - model_name: (Groq) Llama 3.1 70B
-    litellm_params:
-      model: groq/llama-3.1-70b-versatile
-      api_key: os.environ/GROQ_API_KEY
-
-  - model_name: (Groq) Llama 3.1 8B
-    litellm_params:
-      model: groq/llama-3.1-8b-instant
-      api_key: os.environ/GROQ_API_KEY
-
-  - model_name: DeepSeek Coder
-    litellm_params:
-      model: deepseek/deepseek-coder
-      api_key: os.environ/DEEPSEEK_API_KEY
-
-  - model_name: DeepSeek Chat
-    litellm_params:
-      model: deepseek/deepseek-chat
-      api_key: os.environ/DEEPSEEK_API_KEY
-
-  - model_name: Codestral
-    litellm_params:
-      model: text-completion-codestral/codestral-latest
-      api_key: os.environ/CODESTRAL_API_KEY
+      model: gemini/gemini-2.5-flash
+      api_key: os.environ/GEMINI_API_KEY
 
 general_settings:
   master_key: os.environ/MASTER_KEY
+  user_header_name: "x-openwebui-user-email" # Use X-OpenWebUI-User-Email if you prefer email
+
+user_header_mappings:
+  - header_name: x-openwebui-user-id
+    litellm_user_role: openwebui_user
 
 # guardrails:
 #   - guardrail_name: "presidio-pre-guard"
@@ -62,3 +28,11 @@ general_settings:
 #       output_parse_pii: True
 
 litellm_settings:
+  extra_spend_tag_headers:
+    - "x-openwebui-user-id"
+    - "x-openwebui-user-email"
+  # Sets a max budget of $X USD across all proxy calls
+  max_budget: 50.0
+  # Optional: Sets a duration for the budget to reset (e.g., 30 days)
+  budget_duration: 30d
+  success_callback: ["cost_and_usage_callback"]
