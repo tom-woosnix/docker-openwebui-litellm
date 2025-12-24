@@ -1,8 +1,4 @@
 model_list:
-  - model_name: gpt-5
-    litellm_params:
-      model: gpt-5
-      api_key: os.environ/OPENAI_API_KEY
   - model_name: gemini-3-pro
     litellm_params:
       model: gemini/gemini-3-pro-preview
